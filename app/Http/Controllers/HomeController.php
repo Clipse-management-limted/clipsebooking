@@ -7,6 +7,7 @@ use App\Models\User_tickets;
 use Illuminate\Http\Request;
 use App\Models\foods_lists;
 use App\Traits\UploadTrait;
+use Image;
 
 
 class HomeController extends Controller
@@ -42,6 +43,91 @@ class HomeController extends Controller
 
 
     public function createFood(Request $request)
+    {
+
+      // Form validation
+      $request->validate([
+        'Name' => ['required', 'string'],
+        'price' => ['required','numeric'],
+        'attachment' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+      ]);
+
+        if($request->hasFile('attachment')) {
+            //get filename with extension
+             $filenamewithextension = $request->file('attachment')->getClientOriginalName();
+// dd($filenamewithextension);
+            //get filename without extension
+        //   $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+        //    dd($filename);
+
+     $filename =$request['Name'];
+
+            //get file extension
+            $extension = $request->file('attachment')->getClientOriginalExtension();
+
+            //filename to store
+            $filenametostore = $filename.'.'.$extension;
+
+            //small thumbnail name
+            $smallthumbnail = $filename.'.'.'png';
+
+            //medium thumbnail name
+            $mediumthumbnail = $filename.'_medium_'.time().'.'.$extension;
+
+            //large thumbnail name
+            $largethumbnail = $filename.'_large_'.time().'.'.$extension;
+
+            //Upload File
+            $request->file('attachment')->storeAs('public/food', $filenametostore);
+            $request->file('attachment')->storeAs('public/food/thumbnail', $smallthumbnail);
+            // $request->file('attachment')->storeAs('public/food/thumbnail', $mediumthumbnail);
+            // $request->file('attachment')->storeAs('public/food/thumbnail', $largethumbnail);
+
+            //create small thumbnail
+            $image_name='/storage/public/food/thumbnail/'.$smallthumbnail;
+
+                                           $path = public_path() . $image_name;
+          //  $smallthumbnailpath = public_path('storage/food/thumbnail/'.$smallthumbnail);
+            $smallthumbnailpath = $path;
+         $this->createThumbnail($smallthumbnailpath, 150, 93);
+
+            $items = foods_lists::create([
+            'food_name' => $request['Name'],
+            'price' => $request['price'],
+
+            ]);
+
+            // //create medium thumbnail
+            // $mediumthumbnailpath = public_path('storage/food/thumbnail/'.$mediumthumbnail);
+            // $this->createThumbnail($mediumthumbnailpath, 300, 185);
+            //
+            // //create large thumbnail
+            // $largethumbnailpath = public_path('storage/food/thumbnail/'.$largethumbnail);
+            // $this->createThumbnail($largethumbnailpath, 550, 340);
+
+           return redirect()->back()->with('success','Success! New item added');
+        }
+    }
+
+    /**
+     * Create a thumbnail of specified size
+     *
+     * @param string $path path of thumbnail
+     * @param int $width
+     * @param int $height
+     */
+    public function createThumbnail($path, $width, $height)
+    {
+  //  dd($path);
+    $img = Image::make($path)->resize($width, $height)->save($path);
+        // $img = Image::make($path)->resize($width, $height, function ($constraint) {
+        //     $constraint->aspectRatio();
+        // });
+        // $img->save($path);
+    }
+
+
+    public function storecreateFood(Request $request)
        {
            // Form validation
            $request->validate([
@@ -49,7 +135,7 @@ class HomeController extends Controller
              'price' => ['required','numeric'],
              'attachment' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
            ]);
-
+if($request->hasFile('attachment')) {
 
                // Get image file
                $image = $request->file('attachment');
@@ -59,11 +145,11 @@ class HomeController extends Controller
                $folder = '/uploads/images/';
                // Make a file path where image will be stored [ folder path + file name + file extension]
                $filePath = $folder . $name. '.' . $image->getClientOriginalExtension();
-dd($filePath);
+        //  dd($filePath);
               // Upload image
                $this->uploadOne($image, $folder, 'public', $name);
                // Set user profile image path in database to filePath
-               $user->profile_image = $filePath;
+            //   $user->profile_image = $filePath;
 
                  $items = foods_lists::create([
                  'food_name' => $request['Name'],
@@ -93,12 +179,12 @@ dd($filePath);
            //     $user->profile_image = $filePath;
            // }
            // Persist user record to database
-           $user->save();
+          // $user->save();
 
            // Return user back and show a flash message
            return redirect()->back()->with(['status' => 'Profile updated successfully.']);
        }
-
+}
 
 
     public function createFood225(Request $request){
