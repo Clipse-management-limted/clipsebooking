@@ -22,8 +22,8 @@
             <!-- //.col-md-4 -->
 
             <div class="col-md-8 mt-3 mt-md-0 text-center text-md-left">
-                <h6 class="font-weight-bold letter-spacing-2 text-primary text-uppercase">Kemang Village</h6>
-                <h4 class="font-alt font-weight-bold mt-2">E: hello@segita.com</h4>
+                <h6 class="font-weight-bold letter-spacing-2 text-primary text-uppercase">CENTRIC.NG</h6>
+                <h4 class="font-alt font-weight-bold mt-2">E: clipsemgt@gmail.com</h4>
                 <h4 class="font-alt font-weight-bold mt-2">P: +62 134 445 634</h4>
                 <p class="font-weight-bold mt-2 text-gray-600">Lippo Mall Kemang 3rd Floor, Jl. Pangeran Antasari No. 36P Jakarta Selatan 12950, Indonesia</p>
                 <span class="bg-secondary mt-3 mx-auto mx-md-0 sep-line-thick"></span>
