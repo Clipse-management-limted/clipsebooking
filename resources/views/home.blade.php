@@ -50,6 +50,7 @@
                       </tr>
                     </thead>
                     <tbody>
+
                       @foreach ($comments as $user)
 
                      <tr>

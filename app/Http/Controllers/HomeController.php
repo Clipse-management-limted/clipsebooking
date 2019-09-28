@@ -7,7 +7,9 @@ use App\Models\User_tickets;
 use Illuminate\Http\Request;
 use App\Models\foods_lists;
 use App\Traits\UploadTrait;
+use App\Models\events_tickets;
 use Image;
+use App\Models\Events;
 
 
 class HomeController extends Controller
@@ -35,12 +37,146 @@ class HomeController extends Controller
       ]);
     }
 
+
     public function showFood()
     {
       $food=foods_lists::all();
           return view('pages.foods.foods')->with('foods',$food);
     }
 
+    public function showEvents()
+    {
+     $event=Events::all();
+          return view('pages.events.events')->with('events',$event);
+    }
+
+public function createEvent(Request $request)
+{
+  // Form validation
+  $request->validate([
+    'title' => ['required', 'string'],
+    'description' => ['required','string'],
+    'venue' => ['required', 'string'],
+      'attachment' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+  ]);
+  if($request->hasFile('attachment')) {
+      //get filename with extension
+       $filenamewithextension = $request->file('attachment')->getClientOriginalName();
+// dd($filenamewithextension);
+      //get filename without extension
+  //   $filename = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+  //    dd($filename);
+
+$filename =$request['title'];
+
+      //get file extension
+      $extension = $request->file('attachment')->getClientOriginalExtension();
+
+      //filename to store
+      $filenametostore = $filename.'.'.$extension;
+
+      //small thumbnail name
+      $smallthumbnail = $filename.'.'.$extension;
+
+      //medium thumbnail name
+      $mediumthumbnail = $filename.'_medium_'.time().'.'.$extension;
+
+      //large thumbnail name
+      $largethumbnail = $filename.'_large_'.time().'.'.$extension;
+
+      //Upload File
+      $request->file('attachment')->storeAs('public/event', $filenametostore);
+      $request->file('attachment')->storeAs('public/event/thumbnail', $smallthumbnail);
+      // $request->file('attachment')->storeAs('public/food/thumbnail', $mediumthumbnail);
+      // $request->file('attachment')->storeAs('public/food/thumbnail', $largethumbnail);
+
+      //create small thumbnail
+      $image_name='/storage/public/event/thumbnail/'.$smallthumbnail;
+
+                                     $path = public_path() . $image_name;
+    //  $smallthumbnailpath = public_path('storage/food/thumbnail/'.$smallthumbnail);
+      $smallthumbnailpath = $path;
+   $this->createThumbnail($smallthumbnailpath, 150, 93);
+
+
+  $items = Events::create([
+  'title' => $request['title'],
+  'description' => $request['description'],
+  'start_time'    => $request['start_time'],
+  'venue'   => $request['venue'],
+  'file_name' =>$filenametostore
+
+  ]);
+
+  //dd($items);
+
+   return redirect()->back()->with('status','Success! New item added');
+    }
+}
+
+
+public function createEvent_Tickets(Request $request)
+	{
+		if (!is_array($request->subname) || !is_array($request->price) || !is_array($request->noT)) {
+			dd('Form tampering or CSRF suspected');
+		}
+
+		if (
+			(count($request->subname) != count($request->price)) ||
+			(count($request->subname) != count($request->noT)) ||
+			(count($request->price) != count($request->noT))
+		) {
+			dd('Suspected CSRF of Javascript failure');
+		}
+
+		for ($i = 0; $i < count($request->subname); $i++) {
+			$post = events_tickets::create(array(
+				'event_id' => $request->event_id,
+				'ticket_name' => $request->subname[$i],
+				'price' => $request->price[$i],
+				'ticket_available' => $request->noT[$i]
+				// 'available_from'      =>    $request->event_id,
+				// 'available_to'=>        $request->event_id
+				// 'author' => Auth::user()->id
+			));
+		}
+
+		$message = 'Post has been successfully added!';
+		return redirect()->back()->with('status', $message);
+	}
+
+// public function createEvent_Tickets(Request $request)
+// {
+//
+// echo count($request->subname);
+// echo count($request->price);
+// echo count($request->noT);
+//
+//
+//
+// //   foreach ($request->subname as $Ticketname)
+// //       {
+// //         foreach ($request->price as $Ticketprice)
+// //             {
+// //               foreach ($request->noT as $Ticketnot)
+// //                 {
+// // //dd($Ticketname);
+// //                           $post = events_tickets::create(array(
+// //                            'event_id' => $request->event_id,
+// //                            'ticket_name' => $Ticketname,
+// //                            'price'     =>    $Ticketprice,
+// //                            'ticket_available'  =>       $Ticketnot
+// //                            // 'available_from'      =>    $request->event_id,
+// //                            // 'available_to'=>        $request->event_id
+// //                            // 'author' => Auth::user()->id
+// //                        ));
+// //                  }
+// //            }
+// //       }
+// //
+// //       $message ='Post has been successfully added!';
+// //     return redirect()->back()->with('status', $message);
+// }
 
     public function createFood(Request $request)
     {

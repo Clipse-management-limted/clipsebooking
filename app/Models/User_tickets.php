@@ -8,7 +8,7 @@ use App\Models\Tickets;
 class User_tickets extends Model
 {
   protected $fillable = [
-        'id','ticket_name','quantity','amount','payment_status','user_id'
+        'event_id','id','ticket_name','quantity','amount','payment_status','user_id'
   ];
 
   public function author()

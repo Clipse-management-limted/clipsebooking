@@ -1,0 +1,91 @@
+/*
+* Section - Hero
+*/
+
+#hero {
+  background-image: url("../images/bg-hero.jpg");
+}
+
+#hero-bg-parallax > .bg-parallax {
+  background-image: url("../images/bg-hero-parallax.jpg");
+}
+
+#hero-bg-slideshow .slides > .bg-img-cover:nth-child(1) {
+  background-image: url("../images/bg-hero-slideshow-1.jpg");
+}
+
+#hero-bg-slideshow .slides > .bg-img-cover:nth-child(2) {
+  background-image: url("../images/bg-hero-slideshow-2.jpg");
+}
+
+#hero-bg-slideshow .slides > .bg-img-cover:nth-child(3) {
+  background-image: url("../images/bg-hero-slideshow-3.jpg");
+}
+
+#hero-countdown {
+  background-image: url("../images/bg-hero-countdown.jpg");
+}
+
+#hero-product-image {
+  background-image: url("../images/bg-hero-product-image.jpg");
+}
+
+#hero-registration-form-countdown {
+  background-image: url("../images/bg-hero-registration-form-countdown.jpg");
+}
+
+#hero-registration-form {
+  background-image: url("../images/bg-hero-registration-form.jpg");
+}
+
+#hero-subscribe-form-countdown {
+  background-image: url("../images/bg-hero-subscribe-form-countdown.jpg");
+}
+
+#hero-subscribe-form-video-vimeo {
+  background-image: url("../images/bg-hero-subscribe-form-video-vimeo.jpg");
+}
+
+#hero-subscribe-form-video-youtube {
+  background-image: url("../images/bg-hero-subscribe-form-video-youtube.jpg");
+}
+
+#hero-subscribe-form {
+  background-image: url("../images/bg-hero-subscribe-form.jpg");
+}
+
+
+/*
+* Section - Overview
+*/
+
+#overview {
+  background-image: url("../images/bg-overview.jpg");
+}
+
+
+/*
+* Section - Benefits
+*/
+
+#benefits {
+  background-image: url("../images/bg-benefits.jpg");
+}
+
+
+/*
+* Section - Pricing
+*/
+
+#pricing {
+  background-image: url("../images/bg-pricing.jpg");
+}
+
+
+/*
+* Section - Subscribe
+*/
+
+#subscribe {
+  background-image: url("../images/bg-subscribe.jpg");
+}

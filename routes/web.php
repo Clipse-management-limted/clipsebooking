@@ -33,9 +33,9 @@ use App\Models\User_tickets;
 //
 // });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',  'EventsController@welcome')->name('home');
+Route::get('/contact-us','EventsController@contactus')->name('contact-us');
+Route::post('/contact','EventsController@sendEmail')->name('contact');
 Auth::routes(['verify' => true]);
 Auth::routes();
 
@@ -43,11 +43,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/food', 'FoodController@index')->name('food');
 Route::get('/packing', 'PackingController@index')->name('packing');
 Route::get('/tickets', 'TicketsController@index')->name('tickets');
+Route::get('/ticket/{id?}', 'TicketsController@load_form')->name('ticket');
 Route::post('/BuyTicket', 'TicketsController@createPackage')->name('buy_ticket');
 Route::post('/BuyFood', 'FoodController@orderFood')->name('buy_food');
 Route::get('qr-code-g','TicketsController@buildQrCode')->name('qr-code-g');
 Route::post('/pay', 'TicketsController@redirectToGateway')->name('pay');
 Route::get('/callback', 'TicketsController@handleGatewayCallback');
+Route::get('/callback2', 'TicketsController@handleGatewayCallback2');
 Route::get('/payment', 'TicketsController@paymentpage')->name('payment');
 
 
@@ -60,4 +62,7 @@ Route::middleware(['auth'])->group(function(){
 Route::get('/verify', 'TicketsController@confirm')->name('verify');
 Route::post('/create_food_item', 'HomeController@createFood')->name('create_food_item');
 Route::get('/create-Food', 'HomeController@showFood')->name('create-Food');
+Route::get('/create-Events', 'HomeController@showEvents')->name('create-Events');
+Route::post('/create_event_item', 'HomeController@createEvent')->name('create_event_item');
+Route::post('/tickets_type', 'HomeController@createEvent_Tickets')->name('create_event_ticket');
 });

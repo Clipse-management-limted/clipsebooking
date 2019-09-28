@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Tickets;
 use App\Models\User_tickets;
 use App\Mail\MailMember;
+use App\Models\Events;
+use App\Models\events_tickets;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -17,10 +19,22 @@ class TicketsController extends Controller
 
   public function index()
   {
-    return view('pages.tickets.ticket');
+    return view('pages.tickets.tickets')->with([
+      'Events' =>  Events::orderBy('created_at','desc')->paginate(10)
+    ]);
+
+  }
+
+  public function load_form($id)
+  {
+    $TICKECT=events_tickets::where('event_id', '=',$id)->get();
+    //dd($TICKECT);
+        return view('pages.tickets.ticket',compact('id', $id,'TICKECT',$TICKECT));
   }
   public function createPackage(Request $request)
     {
+
+    //  dd($request->get('event_id'));
 
       $this->validate($request, [
           'Name' => 'required|string|max:255',
@@ -36,23 +50,16 @@ class TicketsController extends Controller
         if(!$Exists){
 
           $ticket_name=$request->get('tickect_name');
-          if($ticket_name=='Gold')
-          {
 
-              $total_ticket_amount = 500000* $request->get('num_ticket');
-              $ticket_amount=5000 * $request->get('num_ticket');
+  $getid12=events_tickets::where('id', $ticket_name)
+  ->where('event_id',$request->get('event_id'))  ->first();
+$price= $getid12->price;
+$kbprice= $getid12->price.'00';
+$ticket_name2 =$getid12->ticket_name;
+$total_ticket_amount = $kbprice * $request->get('num_ticket');
+$ticket_amount=$price * $request->get('num_ticket');
 
-          }
-          elseif ($ticket_name=='Regular') {
-                $total_ticket_amount = 250000 * $request->get('num_ticket');
-              $ticket_amount=2500 * $request->get('num_ticket');
-          }
-          else {
-              $total_ticket_amount = 1000000 * $request->get('num_ticket');
-            $ticket_amount=10000 * $request->get('num_ticket');
-
-          }
-            $items =  Tickets::updateOrCreate(
+                $items =  Tickets::updateOrCreate(
               [ 'name' =>$request->get('Name'),
                'phone' => $request->get('phone'),
                'email' => $request->get('Email1'),
@@ -60,26 +67,30 @@ class TicketsController extends Controller
              ]);
 
              $items =  User_tickets::create(array(
-                'ticket_name' =>$request->get('tickect_name'),
+               'event_id' =>$request->get('event_id'),
+                'ticket_name' =>$ticket_name2,
                 'quantity' => $request->get('num_ticket'),
                 'user_id' => $user_id
                ));
 
-               $getid2=User_tickets::where('user_id', $user_id)
-               ->first();
+               // $getid2=User_tickets::where('user_id', $user_id)
+               // ->first();
             $arrayName = array('phone' => $request->get('phone'),'fod'=> $request->get('food') ,'name' =>$request->get('Name'),'email' => $request->get('Email1'),'Amount' =>$ticket_amount);
                $paystack = new Paystack();
                $request->metadata =  $arrayName;
                $user = $request->get('Name');
                $request->email = $request->get('Email1');
-               $request->orderID = $getid2->id;
+               $request->orderID = $user_id;
                $request->amount = $total_ticket_amount;
                $request->quantity =  $request->get('num_ticket');
                $request->reference = Paystack::genTranxRef();
                $request->key = config('paystack.secretKey');
 
-
-
+// $se=Paystack::getAuthorizationUrl();
+// $amount=$se->Response;
+// dd($amount);
+//dd(Paystack::getAuthorizationUrl());
+//dd(Paystack::getResponse());
 
           // $ticket_name=$request->get('tickect_name');
           // if($ticket_name=='Gold')
@@ -239,6 +250,12 @@ class TicketsController extends Controller
      //     return Paystack::getAuthorizationUrl()->redirectNow();
      //  }
 
+
+
+     public function handleGatewayCallback2()
+     {
+    return view('pages.tickets.qrCode');
+     }
       /**
        * Obtain Paystack payment information
        * @return void

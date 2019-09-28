@@ -41,7 +41,7 @@ const mix = require('laravel-mix');
             'public/an/dist/css/skins/_all-skins.min.css',
             // 'public/an/plugins/iCheck/flat/blue.css',
             // 'public/an/plugins/datepicker/datepicker3.css',
-            // 'public/an/plugins/daterangepicker/daterangepicker-bs3.css',
+           'public/an/plugins/daterangepicker/daterangepicker-bs3.css',
             // 'public/an/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css',
            'public/an/dist/css/toastr.min.css'
 
@@ -55,8 +55,10 @@ const mix = require('laravel-mix');
        //    'public/an/plugins/input-mask/jquery.inputmask.extensions.js',
        'public/an/bootstrap/js/bootstrap.min.js',
        'public/an/plugins/slimScroll/jquery.slimscroll.min.js',
+       'public/an/plugins/daterangepicker/daterangepicker.js',
        // 'public/an/plugins/fastclick/fastclick.min.js',
        'public/an/dist/js/app.min.js',
+       // 'public/an/css/ckeditor.js',
        // 'public/an/dist/js/demo.js',
        // 'public/an/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js',
            'public/an/dist/js/validator.min.js',

@@ -8,6 +8,7 @@ use Paystack;
 use App\Mail\MailMember;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use App\Models\foods_lists;
 
 class FoodController extends Controller
 {
@@ -20,7 +21,8 @@ class FoodController extends Controller
 
   public function index()
   {
-    return view('pages.foods.food');
+      $food=foods_lists::all();
+    return view('pages.foods.food')->with('foods',$food);
   }
 
   public function orderFood(Request $request)

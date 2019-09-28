@@ -164,6 +164,7 @@ return [
         SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
         Unicodeveloper\Paystack\PaystackServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -231,6 +232,8 @@ return [
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Form' => 'Collective\Html\FormFacade',
+        'Html' => 'Collective\Html\HtmlFacade',
 
     ],
 

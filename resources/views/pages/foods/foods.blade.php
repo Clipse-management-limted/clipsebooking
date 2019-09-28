@@ -1,4 +1,5 @@
 @extends('layouts.app2')
+@section('title') Foods  @endsection
 @section('content')
 
 <style>
